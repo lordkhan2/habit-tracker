@@ -1,24 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+// app/_layout.tsx
+import { Stack, Redirect, usePathname } from "expo-router";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function RouteGuard({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    const isAuth = false; // ← replace with real auth state
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+    // If not signed in and not already on the auth route, redirect declaratively.
+    if (!isAuth && !pathname.startsWith("/auth")) {
+        return <Redirect href="/auth" />;
+    }
+
+    return <>{children}</>;
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    return (
+        <RouteGuard>
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                {/* Expo Router will auto-register /auth/index.tsx, so you can omit this line,
+           or if you keep it, use the correct path name: "auth/index" */}
+                {/* <Stack.Screen name="auth/index" options={{ headerShown: false }} /> */}
+            </Stack>
+        </RouteGuard>
+    );
 }
