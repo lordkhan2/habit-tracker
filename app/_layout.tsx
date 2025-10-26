@@ -1,27 +1,37 @@
 // app/_layout.tsx
-import { Stack, Redirect, usePathname } from "expo-router";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { Stack, useSegments, useRouter } from "expo-router";
+import { useEffect } from "react";
 
 function RouteGuard({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname();
-    const isAuth = false; // ← replace with real auth state
+    const router = useRouter();
+    const { user, isLoadingUser } = useAuth();
+    const segments = useSegments();
 
-    // If not signed in and not already on the auth route, redirect declaratively.
-    if (!isAuth && !pathname.startsWith("/auth")) {
-        return <Redirect href="/auth" />;
-    }
+    useEffect(() => {
+        const inAuthGroup = segments[0] === "auth";
+
+        if (!user && !inAuthGroup && !isLoadingUser) {
+            router.replace("/auth");
+        } else if (user && inAuthGroup && !isLoadingUser) {
+            router.replace("/");
+        }
+    }, [user, segments]);
 
     return <>{children}</>;
 }
 
 export default function RootLayout() {
     return (
-        <RouteGuard>
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                {/* Expo Router will auto-register /auth/index.tsx, so you can omit this line,
-           or if you keep it, use the correct path name: "auth/index" */}
-                {/* <Stack.Screen name="auth/index" options={{ headerShown: false }} /> */}
-            </Stack>
-        </RouteGuard>
+        <AuthProvider>
+            <RouteGuard>
+                <Stack>
+                    <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                    />
+                </Stack>
+            </RouteGuard>
+        </AuthProvider>
     );
 }
