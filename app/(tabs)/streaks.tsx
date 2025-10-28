@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function Login() {
+export default function streaksScreen() {
     return (
         <View
             style={{
