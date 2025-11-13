@@ -1,50 +1,145 @@
-# Welcome to your Expo app 👋
+# Habit Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern React Native habit tracking application built with Expo, Appwrite, and React Native Paper. Track your daily habits, build streaks, and stay consistent with your goals.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **User Authentication** - Secure login and registration with Appwrite
+- **Habit Management** - Create, view, and delete habits with custom descriptions and frequencies
+- **Daily Tracking** - Mark habits as complete with swipe gestures
+- **Streak Tracking** - Visualize your consistency with streak counters
+- **Streaks View** - Monitor your progress across all habits
+- **Modern UI** - Beautiful interface built with React Native Paper
+- **Real-time Updates** - Live synchronization using Appwrite real-time subscriptions
+- **Cross-platform** - Works on iOS, Android, and Web
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **Framework**: [Expo](https://expo.dev) (~54.0.20)
+- **Routing**: [Expo Router](https://docs.expo.dev/router/introduction/) (file-based routing)
+- **UI Library**: [React Native Paper](https://callstack.github.io/react-native-paper/)
+- **Backend**: [Appwrite](https://appwrite.io/) (Database & Authentication)
+- **Language**: TypeScript
+- **State Management**: React Context API
+- **Gestures**: React Native Gesture Handler
 
-   ```bash
-   npx expo start
-   ```
+## Prerequisites
 
-In the output, you'll find options to open the app in a
+- Node.js (v18 or higher)
+- npm or yarn
+- Expo CLI (installed globally or via npx)
+- Appwrite account and project setup
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Getting Started
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Install Dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Environment Variables
 
-## Learn more
+Create a `.env` file in the root directory with the following variables:
 
-To learn more about developing your project with Expo, look at the following resources:
+```env
+EXPO_PUBLIC_APPWRITE_ENDPOINT=your_appwrite_endpoint
+EXPO_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
+EXPO_PUBLIC_APPWRITE_PROJECT_NAME=your_project_name
+EXPO_PUBLIC_DB_ID=your_database_id
+EXPO_PUBLIC_HABITS_COLLECTION_ID=your_habits_collection_id
+EXPO_PUBLIC_COMPLETIONS_COLLECTION_ID=your_completions_collection_id
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. Appwrite Setup
 
-## Join the community
+1. Create an Appwrite project
+2. Set up a database with two collections:
+   - **Habits Collection**: Documents with fields:
+     - `user_id` (string)
+     - `title` (string)
+     - `description` (string)
+     - `frequency` (string)
+     - `streak_count` (integer)
+     - `last_completed` (datetime)
+   - **Completions Collection**: Documents with fields:
+     - `habit_id` (string)
+     - `user_id` (string)
+     - `completed_at` (datetime)
+3. Configure authentication in Appwrite
+4. Set up proper permissions for collections
 
-Join our community of developers creating universal apps.
+### 4. Start the Development Server
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm start
+# or
+npx expo start
+```
+
+### 5. Run on Your Device
+
+- **iOS Simulator**: Press `i` in the terminal or run `npm run ios`
+- **Android Emulator**: Press `a` in the terminal or run `npm run android`
+- **Web**: Press `w` in the terminal or run `npm run web`
+- **Physical Device**: Scan the QR code with Expo Go app
+
+## Project Structure
+
+```
+habit-tracker/
+├── app/
+│   ├── (tabs)/          # Tab navigation screens
+│   │   ├── index.tsx    # Today's habits screen
+│   │   ├── streaks.tsx  # Streaks view
+│   │   └── add-habit.tsx # Add new habit
+│   ├── auth.tsx         # Authentication screen
+│   ├── _layout.tsx      # Root layout with auth guard
+│   └── types/           # TypeScript type definitions
+├── lib/
+│   ├── appwrite.ts      # Appwrite client configuration
+│   └── auth-context.tsx # Authentication context provider
+├── assets/              # Images and static assets
+└── package.json
+```
+
+## Available Scripts
+
+- `npm start` - Start the Expo development server
+- `npm run android` - Start on Android emulator
+- `npm run ios` - Start on iOS simulator
+- `npm run web` - Start on web browser
+- `npm run lint` - Run ESLint
+
+## Features in Detail
+
+### Habit Management
+- Create habits with title, description, and frequency
+- Swipe right to mark a habit as complete
+- Swipe left to delete a habit
+- View streak counts for each habit
+
+### Real-time Synchronization
+- Changes sync automatically across devices
+- Real-time updates when habits are created, updated, or deleted
+- Instant completion tracking
+
+### Authentication
+- Secure user authentication with Appwrite
+- Protected routes with route guards
+- Automatic redirect based on auth state
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is private and proprietary.
+
+## Learn More
+
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Paper](https://callstack.github.io/react-native-paper/)
+- [Appwrite Documentation](https://appwrite.io/docs)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
